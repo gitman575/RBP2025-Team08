@@ -1,5 +1,6 @@
 # !/usr/bin/env python3
 import rclpy
+import cv2
 from rclpy.node import Node
 
 from sensor_msgs.msg import Image, CompressedImage
@@ -17,6 +18,8 @@ class DetermineColor(Node):
         try:
             # listen image topic
             image = self.bridge.imgmsg_to_cv2(data, 'bgr8')
+            red_intensity=image[20, 10, 2]
+            blue_intensity=image[20, 10, 0]
 
             # prepare rotate_cmd msg
             # DO NOT DELETE THE BELOW THREE LINES!
@@ -31,8 +34,14 @@ class DetermineColor(Node):
             # msg.frame_id = '0'  # STOP
             # msg.frame_id = '-1' # CW 
             
+            if red_intensity > blue_intensity:
+                msg.frame_id='-1'
+            elif red_intensity < blue_intensity:
+                msg.frame_id='+1'
+            
             # publish color_state
             self.color_pub.publish(msg)
+            
         except CvBridgeError as e:
             self.get_logger().error('Failed to convert image: %s' % e)
 
@@ -43,3 +52,6 @@ if __name__ == '__main__':
     rclpy.spin(detector)
     detector.destroy_node()
     rclpy.shutdown()
+    
+    
+
