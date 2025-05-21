@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 
-def color(t, v_min):
+def color(t, v_min): #색 판별 (black, red, blue, green, other)
     h,s,v=t[0],t[1],t[2]
     if v<=v_min+3: return 1
     if s>50 and v>50:
@@ -10,13 +10,13 @@ def color(t, v_min):
         elif 100<h<140: return 4
     return 0
 
-def check(x,y,image, buffer):
+def check(x,y,image, buffer): #dfs용
     H, W=len(image), len(image[0])
     if 0<=x<H and 0<=y<W:
         if image[x][y]==1 and buffer[x][y]==0: return True
     return False
 
-def dfs(x, y, image, buffer):
+def dfs(x, y, image, buffer): #모니터 찾기기
     stack = []
     group = []
     stack.append((x,y))
@@ -35,7 +35,7 @@ def dfs(x, y, image, buffer):
 def color_detector(filename):
     global frame
     img = cv2.imread(filename, cv2.IMREAD_COLOR)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV) #HSV 변환환
     H,W= len(img), len(img[0])
     monit = []
     for i in range(0,H,5):
@@ -49,7 +49,7 @@ def color_detector(filename):
     for i in range(H//5):
         for j in range(W//5):
             t=img[i*5][j*5]
-            monit[i][j]=color(t,v_min)
+            monit[i][j]=color(t,v_min) #검은색 정의 후 1:5 크기로 축소, 색판별
 
     del img
     import gc
@@ -63,7 +63,7 @@ def color_detector(filename):
             if monit[i][j]==1:
                 group = dfs(i,j,monit,buf)
                 if len(group)>=len(frame):
-                    frame=group
+                    frame=group #모니터
     '''
     disp=[]
     for i in range(H//5):
@@ -94,10 +94,10 @@ def color_detector(filename):
     for p in range(len(l)):
         y_min = min(l[p])
         y_max = max(l[p])
-        border.append([y_min, y_max])
+        border.append([y_min, y_max]) #모니터 내부
     
     del l
-    gc.collect()
+    gc.collect() #메모리 절약용
 
     R,G,B=0,0,0
     for i in range(x_min, x_max+1):
