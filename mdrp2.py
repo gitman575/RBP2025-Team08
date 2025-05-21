@@ -16,7 +16,7 @@ def check(x,y,image, buffer): #dfs용
         if image[x][y]==1 and buffer[x][y]==0: return True
     return False
 
-def dfs(x, y, image, buffer): #모니터 찾기기
+def dfs(x, y, image, buffer): #모니터 찾기
     stack = []
     group = []
     stack.append((x,y))
@@ -35,7 +35,7 @@ def dfs(x, y, image, buffer): #모니터 찾기기
 def color_detector(filename):
     global frame
     img = cv2.imread(filename, cv2.IMREAD_COLOR)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV) #HSV 변환환
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV) #HSV 변환
     H,W= len(img), len(img[0])
     monit = []
     for i in range(0,H,5):
@@ -83,7 +83,7 @@ def color_detector(filename):
             elif monit[i][j]==4: disp[i][j]=[255,0,0]
     cv2.imshow('image',disp)
     cv2.waitKey(0)
-    '''
+    ''' #모니터 확인용
 
     x_min = min(p[0] for p in frame)
     x_max = max(p[0] for p in frame)
