@@ -83,7 +83,7 @@ def color_detector(filename):
             elif monit[i][j]==4: disp[i][j]=[255,0,0]
     cv2.imshow('image',disp)
     cv2.waitKey(0)
-    '''
+    ''' #모니터 확인용
 
     x_min = min(p[0] for p in frame)
     x_max = max(p[0] for p in frame)
